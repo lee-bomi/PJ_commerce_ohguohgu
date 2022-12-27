@@ -34,8 +34,8 @@ public class MemberServiceImpl implements MemberService{
                 .name(input.name)
                 .phone(input.phone)
                 .password(encPw)
-                .adminYn(AdminYn.FALSE)
-                .emailAuthYn(EmailAuthYn.FALSE)
+                .adminYn(false)
+                .emailAuthYn(false)
                 .emailAuthKey(uuid)
                 .regDt(LocalDateTime.now())
                 .build());
@@ -46,6 +46,27 @@ public class MemberServiceImpl implements MemberService{
                 + "<div><a href='http://localhost:8080/member/email-auth?uuid=" + uuid + "'>가입인증하기</a></div>";
 
         mailComponent.sendMail(email, subject, text);
+
+        return true;
+    }
+
+    @Override
+    public boolean emailAuth(String uuid) {
+
+        Optional<Member> optionalMember = memberRepository.findByEmailAuthKey(uuid);
+        if (!optionalMember.isPresent()) {
+            return false;
+        }
+
+        Member member = optionalMember.get();
+
+        //이미 계정 활성화되어있는데 새로고침했을때 계속 활성화 되지않게하기 위함
+//        if (member.getEmail) {
+//            return false;
+//        }
+
+        member.setEmailAuthYn(true);
+        memberRepository.save(member);
 
         return true;
     }

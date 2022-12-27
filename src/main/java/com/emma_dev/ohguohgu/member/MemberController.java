@@ -29,8 +29,14 @@ public class MemberController {
         return "/member/register_complete";
     }
 
-        memberService.register(input);
+    @GetMapping("/member/email-auth")
+    public String emailAuth(Model model, HttpServletRequest request) {
 
-        return "redirect:/";
+        String uuid = request.getParameter("uuid");
+        //service에서 id정보확인
+        boolean authResult = memberService.emailAuth(uuid);
+        model.addAttribute("result", authResult);
+
+        return "member/emailAuthResult";
     }
 }
