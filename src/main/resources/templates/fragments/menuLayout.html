@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+<div th:fragment="fragment-snack-menu">
+    <hr>
+    <div>
+        <a href="/snack/bone">뼈간식</a>
+        |
+        <a href="/snack/handmade">수제간식</a>
+        |
+        <a href="/snack/dental">덴탈껌</a>
+        |
+        <a href="/snack/nutrition">영양제</a>
+    </div>
+    <hr>
+</div>
+
+<div th:fragment="fragment-menu">
+    <a href="/member/login">로그인</a>
+</div>
+
+<div th:fragment="fragment-member-menu">
+    <a href="/member/cart">장바구니</a>
+    |
+    <a href="/member/logout">로그아웃</a>
+</div>
+
+<div th:fragment="fragment-admin-menu">
+    <a href="/admin/main.do">관리자 메인</a>
+    |
+    <a href="/admin/member/list.do">회원관리</a>
+    |
+    <a href="/admin/category/list.do">카테고리관리</a>
+    |
+    <a href="/member/logout">로그아웃</a>
+</div>
+</body>
+</html>

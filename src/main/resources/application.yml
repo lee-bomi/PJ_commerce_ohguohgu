@@ -5,3 +5,17 @@ spring:
     username: ohguohgu_user
     password: a1234
 
+  thymeleaf:
+    cache: false
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
