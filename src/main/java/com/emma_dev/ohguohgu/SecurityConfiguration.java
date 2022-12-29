@@ -1,58 +1,83 @@
+
 package com.emma_dev.ohguohgu;
 
+import com.emma_dev.ohguohgu.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration {
-    //    @Bean
-//    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(User.withUsername("admin").password(encoder.encode("1111")).roles("ADMIN", "USER", "SYS").build());
-//        manager.createUser(User.withUsername("user").password(encoder.encode("1111")).roles("USER").build());
-//        manager.createUser(User.withUsername("sys").password(encoder.encode("1111")).roles("SYS", "USER").build());
-//
-//        return manager;
-//    }
+@Configuration
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
-//    private final AuthenticationFailureHandler failureHandler;
+    private final MemberService memberService;
+    private final LoginSuccessHandler loginSuccessHandler;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    UserAuthenticationFailureHandler getFailureHandler() {
+        return new UserAuthenticationFailureHandler();
+    }
+    @Bean
+    PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .anyRequest().permitAll();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers(
+                        "/"
+                        , "/member/login"
+                        , "/member/register"
+                        , "/member/email-auth"
+                        , "/member/find-password"
+                        , "/member/reset/password"
+                )
+                .permitAll();
 
-        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("/admin/**")
+                .hasAuthority("ROLE_ADMIN");
+//                .antMatchers("/member/**")
+//                .hasAuthority("USER");
 
-//        http.formLogin()
-//                .loginPage("/index")
+        http.formLogin()
+                .loginPage("/member/login")
 //                .successHandler(loginSuccessHandler)
-//                .failureHandler(failureHandler)
-//                .permitAll();
-//
+                .failureHandler(getFailureHandler())
+                .permitAll();
 
-        return http.build();
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
+
+        http.exceptionHandling()
+                .accessDeniedPage("/error/denied");
+
+        http.csrf().disable();  //post요청이 가능하도록 추가 설정함
+        super.configure(http);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(memberService) //인증할때 회원의 정보를 넘겨야해서
+                .passwordEncoder(getPasswordEncoder());
+
+        super.configure(auth);
 
     }
+
+
+
 
 }

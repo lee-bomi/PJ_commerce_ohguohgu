@@ -1,21 +1,35 @@
 package com.emma_dev.ohguohgu.member;
 
 import com.emma_dev.ohguohgu.MailComponent;
-import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
     private final MailComponent mailComponent;
+    private final PasswordEncoder passwordEncoder;
+
+    public MemberServiceImpl(@Lazy MemberRepository memberRepository, @Lazy MailComponent mailComponent, @Lazy PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
+        this.mailComponent = mailComponent;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public boolean register(MemberInput input) {
@@ -54,20 +68,62 @@ public class MemberServiceImpl implements MemberService{
     public boolean emailAuth(String uuid) {
 
         Optional<Member> optionalMember = memberRepository.findByEmailAuthKey(uuid);
-        if (!optionalMember.isPresent()) {
+        if (optionalMember.isEmpty()) {
             return false;
         }
 
         Member member = optionalMember.get();
 
-        //이미 계정 활성화되어있는데 새로고침했을때 계속 활성화 되지않게하기 위함
-//        if (member.getEmail) {
-//            return false;
-//        }
+//        //이미 계정 활성화되어있는데 새로고침했을때 계속 활성화 되지않게하기 위함
+        if (member.isEmailAuthYn()) {
+            return false;
+        }
 
         member.setEmailAuthYn(true);
         memberRepository.save(member);
 
         return true;
     }
+
+    @Override
+    public boolean login(MemberInput param) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(param.getEmail());
+        if (optionalMember.isEmpty()) {
+            return false;
+        }
+
+        Member member = optionalMember.get();
+
+        String storedPw = member.getPassword();
+        String inputPw = param.getPassword();
+
+        boolean matchResult = passwordEncoder.matches(inputPw, storedPw);
+
+        if (matchResult) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Optional<Member> optionalMember = memberRepository.findById(username);
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다");
+        }
+
+        Member member = optionalMember.get();
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        if (member.isAdminYn()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+
+        return new User(member.getEmail(), member.getPassword(), grantedAuthorities);
+    }
+
 }

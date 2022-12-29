@@ -1,11 +1,12 @@
 package com.emma_dev.ohguohgu.member;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @Controller
@@ -38,5 +39,21 @@ public class MemberController {
         model.addAttribute("result", authResult);
 
         return "member/emailAuthResult";
+    }
+
+    @GetMapping("/member/login")
+    public String login() {
+        return "member/login";
+    }
+
+    @PostMapping("/member/login")
+    public String login(MemberInput param) {
+
+        boolean result = memberService.login(param);
+        if(result) {
+            return "member/successLogin";
+        } else {
+            return "member/login_fail";
+        }
     }
 }
