@@ -1,4 +1,4 @@
-package com.emma_dev.ohguohgu.member;
+package com.emma_dev.ohguohgu.member.model;
 
 import lombok.*;
 

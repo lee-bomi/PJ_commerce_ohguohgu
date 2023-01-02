@@ -1,4 +1,4 @@
-package com.emma_dev.ohguohgu;
+package com.emma_dev.ohguohgu.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

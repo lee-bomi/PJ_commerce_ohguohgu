@@ -1,5 +1,7 @@
-package com.emma_dev.ohguohgu.member;
+package com.emma_dev.ohguohgu.member.controller;
 
+import com.emma_dev.ohguohgu.member.model.MemberInput;
+import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

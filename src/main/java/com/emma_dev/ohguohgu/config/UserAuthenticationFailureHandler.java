@@ -1,4 +1,4 @@
-package com.emma_dev.ohguohgu;
+package com.emma_dev.ohguohgu.config;
 
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;

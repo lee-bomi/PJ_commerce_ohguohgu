@@ -1,7 +1,6 @@
-package com.emma_dev.ohguohgu;
+package com.emma_dev.ohguohgu.config;
 
-import com.emma_dev.ohguohgu.member.MemberService;
-
+import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,6 +1,9 @@
-package com.emma_dev.ohguohgu.member;
+package com.emma_dev.ohguohgu.member.service;
 
-import com.emma_dev.ohguohgu.MailComponent;
+import com.emma_dev.ohguohgu.component.MailComponent;
+import com.emma_dev.ohguohgu.member.entity.Member;
+import com.emma_dev.ohguohgu.member.model.MemberInput;
+import com.emma_dev.ohguohgu.member.repository.MemberRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +22,7 @@ import java.util.UUID;
 
 @Service
 //@RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponent mailComponent;
@@ -34,7 +37,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean register(MemberInput input) {
 
-        Optional<Member> optionalMember = memberRepository.findByUsername(input.username);
+        Optional<Member> optionalMember = memberRepository.findByUsername(input.getUsername());
         System.out.println("member : " + optionalMember);
         if (optionalMember.isPresent()) {
             return false;
@@ -44,9 +47,9 @@ public class MemberServiceImpl implements MemberService{
         String uuid = UUID.randomUUID().toString();
 
         memberRepository.save(Member.builder()
-                .username(input.username)
-                .name(input.name)
-                .phone(input.phone)
+                .username(input.getUsername())
+                .name(input.getName())
+                .phone(input.getPhone())
                 .password(encPw)
                 .adminYn(input.getName().equals("admin"))
                 .emailAuthYn(false)

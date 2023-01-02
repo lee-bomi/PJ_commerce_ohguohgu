@@ -1,5 +1,6 @@
-package com.emma_dev.ohguohgu.member;
+package com.emma_dev.ohguohgu.member.service;
 
+import com.emma_dev.ohguohgu.member.model.MemberInput;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

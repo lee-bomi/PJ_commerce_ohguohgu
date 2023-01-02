@@ -1,4 +1,4 @@
-package com.emma_dev.ohguohgu.member;
+package com.emma_dev.ohguohgu.member.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
