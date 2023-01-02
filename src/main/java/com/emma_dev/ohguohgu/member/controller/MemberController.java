@@ -1,5 +1,7 @@
 package com.emma_dev.ohguohgu.member.controller;
 
+import com.emma_dev.ohguohgu.admin.entity.Item;
+import com.emma_dev.ohguohgu.admin.service.AdminService;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
 import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 public class MemberController {
 
     private final MemberService memberService;
+    private final AdminService adminService;
 
     @GetMapping("/member/register")
     public String register(){
@@ -63,5 +67,13 @@ public class MemberController {
     @GetMapping("/member/loginSuccess")
     public String loginSuccess() {
         return "index";
+    }
+
+    @GetMapping("/member/item/list")
+    public String itemList(Model model) {
+        List<Item> itemList = adminService.getItemList();
+        model.addAttribute("itemList", itemList);
+
+        return "/member/itemList";
     }
 }

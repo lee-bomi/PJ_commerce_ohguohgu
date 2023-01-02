@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,13 +36,27 @@ class AdminServiceImplTest {
         //when
         adminService.itemRegister(build);
         Optional<Item> byId = adminRepository.findById(itemId);
-        Item item = byId.get();
+        Item item = new Item();
+        if (byId.isPresent()) {
+            item = byId.get();
+        }
         //then
         assertEquals(item.getId(), itemId);
         assertEquals(item.getItemName(), "뼈간식");
         assertEquals(item.getPrice(), 1000);
         assertEquals(item.getDescription(), "뼈간식입니다");
         assertNotNull(item);
+    }
+
+    @Test
+    void list() {
+        //given
+
+        //when
+        List<Item> itemList = adminService.getItemList();
+
+        //then
+        assertEquals(itemList.size(), 4);
     }
 
 }
