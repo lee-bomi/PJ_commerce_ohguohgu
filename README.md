@@ -1,4 +1,8 @@
-# PJ_commerce_ohguohgu
+간단한 커머스 프로젝트
+
+Use : Spring, Jpa, MariaDB, Java, Spring Security
+
+Goal : 등록된 상품을 장바구니에 담아서 관리할 수 있는 커머스 서버를 구축한다.
 
 ## 회원
 ### 공통
