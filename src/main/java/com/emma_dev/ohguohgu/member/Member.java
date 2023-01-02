@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Member {
 
     @Id
-    private String email;
+    private String username;
     private String name;
     private String phone;
     private String password;

@@ -50,10 +50,16 @@ public class MemberController {
     public String login(MemberInput param) {
 
         boolean result = memberService.login(param);
+        System.out.println("result : " + result);
         if(result) {
             return "member/successLogin";
         } else {
             return "member/login_fail";
         }
+    }
+
+    @GetMapping("/member/loginSuccess")
+    public String loginSuccess() {
+        return "index";
     }
 }

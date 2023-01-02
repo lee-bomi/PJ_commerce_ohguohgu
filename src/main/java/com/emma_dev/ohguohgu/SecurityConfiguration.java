@@ -2,7 +2,9 @@
 package com.emma_dev.ohguohgu;
 
 import com.emma_dev.ohguohgu.member.MemberService;
+import com.emma_dev.ohguohgu.member.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -46,11 +50,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         http.authorizeRequests()
                 .antMatchers("/admin/**")
-                .hasAuthority("ROLE_ADMIN");
-//                .antMatchers("/member/**")
-//                .hasAuthority("USER");
+                .hasAuthority("ROLE_ADMIN")
+                .antMatchers("/member/**")
+                .hasAuthority("ROLE_USER");
 
-        http.formLogin()
+        http.formLogin()    //인증이 필요할때 이동할 페이지
                 .loginPage("/member/login")
 //                .successHandler(loginSuccessHandler)
                 .failureHandler(getFailureHandler())
@@ -70,12 +74,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.println("---------------------------------");
         auth.userDetailsService(memberService) //인증할때 회원의 정보를 넘겨야해서
                 .passwordEncoder(getPasswordEncoder());
 
         super.configure(auth);
 
     }
+
+
+    //authentication : 로그인
+    //authorization : 권한
+
 
 
 

@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public boolean register(MemberInput input) {
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(input.email);
+        Optional<Member> optionalMember = memberRepository.findByUsername(input.username);
         System.out.println("member : " + optionalMember);
         if (optionalMember.isPresent()) {
             return false;
@@ -44,17 +44,17 @@ public class MemberServiceImpl implements MemberService{
         String uuid = UUID.randomUUID().toString();
 
         memberRepository.save(Member.builder()
-                .email(input.email)
+                .username(input.username)
                 .name(input.name)
                 .phone(input.phone)
                 .password(encPw)
-                .adminYn(false)
+                .adminYn(input.getName().equals("admin"))
                 .emailAuthYn(false)
                 .emailAuthKey(uuid)
                 .regDt(LocalDateTime.now())
                 .build());
 
-        String email = input.getEmail();
+        String email = input.getUsername();
         String subject = "오구오구 가입 인증메일입니다";
         String text = "<p>가입축하드려요! 아래링크 클릭하셔서 가입을 완료하세요</p>"
                 + "<div><a href='http://localhost:8080/member/email-auth?uuid=" + uuid + "'>가입인증하기</a></div>";
@@ -87,18 +87,19 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean login(MemberInput param) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(param.getEmail());
+        System.out.println("param : " + param);
+        Optional<Member> optionalMember = memberRepository.findByUsername(param.getUsername());
         if (optionalMember.isEmpty()) {
             return false;
         }
-
+        System.out.println("optionalMember : " + optionalMember);
         Member member = optionalMember.get();
 
         String storedPw = member.getPassword();
         String inputPw = param.getPassword();
 
         boolean matchResult = passwordEncoder.matches(inputPw, storedPw);
-
+        System.out.println("matchResult : " + matchResult);
         if (matchResult) {
             return true;
         }
@@ -108,22 +109,18 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Member> optionalMember = memberRepository.findById(username);
+        Optional<Member> optionalMember = memberRepository.findByUsername(username);
+
         if (!optionalMember.isPresent()) {
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다");
         }
-
         Member member = optionalMember.get();
-
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
         if (member.isAdminYn()) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
-
-
-        return new User(member.getEmail(), member.getPassword(), grantedAuthorities);
+        return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
     }
 
 }

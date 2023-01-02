@@ -6,7 +6,7 @@ import lombok.*;
 @ToString
 public class MemberInput {
 
-    String email;
+    String username;
     String name;
     String phone;
     String password;
