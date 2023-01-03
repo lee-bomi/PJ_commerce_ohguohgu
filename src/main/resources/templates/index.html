@@ -2,14 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>메인페이지</title>
+    <title>itemList</title>
+    <style>
+        .list table {
+            width: 50%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+    </style>
 </head>
 <body>
-<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-menu"></p>
+
+<p class="" th:replace="/fragments/menuLayout.html :: fragment-menu"></p>
 <h1>Ohgu-ohgu</h1>
 <h3>강아지 간식 쇼핑몰</h3>
-<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-snack-menu"></p>
-
-
+<div class="list">
+    <table>
+        <tr>
+            <th>상품번호</th>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>상품설명</th>
+        </tr>
+        <tr th:each="x : ${itemList}">
+            <td th:text="${x.id}"></td>
+            <td th:text="${x.itemName}"></td>
+            <td th:text="${x.price}"></td>
+            <td th:text="${x.description}"></td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
