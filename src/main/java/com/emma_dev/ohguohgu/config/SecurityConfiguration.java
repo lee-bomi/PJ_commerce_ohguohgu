@@ -1,14 +1,18 @@
 
 package com.emma_dev.ohguohgu.config;
 
+import com.emma_dev.ohguohgu.member.model.MemberInput;
 import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -52,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
         http.formLogin()    //인증이 필요할때 이동할 페이지
                 .loginPage("/member/login")
-//                .successHandler(loginSuccessHandler)
+                .successHandler(loginSuccessHandler)
                 .failureHandler(getFailureHandler())
                 .permitAll();
 
@@ -70,7 +74,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println("---------------------------------");
         auth.userDetailsService(memberService) //인증할때 회원의 정보를 넘겨야해서
                 .passwordEncoder(getPasswordEncoder());
 

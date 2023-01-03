@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>login</title>
+    <style>
+        p {
+            background-color: yellow;
+            width: 35%;
+        }
+    </style>
 </head>
 <body>
 <h1>오구오구</h1>
@@ -11,6 +17,7 @@
 
 <form action="/member/login" method="post">
     <h3>Login</h3>
+    <p th:text="${errorMessage}"></p>
     아이디 : <input type="text" name="username" placeholder="이메일을 입력하세요">
     비밀번호: <input type="password" name="password">
     <input type="submit" value="로그인">
