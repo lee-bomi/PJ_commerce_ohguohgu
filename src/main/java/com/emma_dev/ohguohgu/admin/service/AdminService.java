@@ -18,4 +18,9 @@ public interface AdminService {
      * 상품리스트 가져오기
      */
     List<Item> getItemList();
+
+    /**
+     * 상품삭제
+     */
+    void deleteItem(Long id);
 }

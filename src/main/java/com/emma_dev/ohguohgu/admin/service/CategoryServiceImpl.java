@@ -33,6 +33,6 @@ public class CategoryServiceImpl implements CategoryService{
         }
         Category category = byId.get();
 
-        categoryRepository.deleteById(category.getId());
+        categoryRepository.deleteById(category.getCategoryId());
     }
 }

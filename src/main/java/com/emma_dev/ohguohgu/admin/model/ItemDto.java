@@ -8,9 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
-
     String itemName;
     int price;
     String description;
-    String category;
+    Long categoryId;
 }

@@ -14,18 +14,26 @@ import javax.persistence.*;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long id;
+
+    @Column(name = "item_name")
     private String itemName;
     private Integer price;
     private String description;
-    private String category;
+
+    @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id")
+    private Category categoryId;
 
     public static Item from(ItemDto itemDto) {
         return Item.builder()
                 .itemName(itemDto.getItemName())
                 .price(itemDto.getPrice())
                 .description(itemDto.getDescription())
-                .category(itemDto.getCategory())
+                .categoryId(Category.builder()
+                        .categoryId(itemDto.getCategoryId())
+                        .build())
                 .build();
     }
 }

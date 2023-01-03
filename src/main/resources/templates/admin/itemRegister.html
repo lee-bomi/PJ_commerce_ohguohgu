@@ -5,16 +5,13 @@
     <title>상품등록</title>
 </head>
 <body>
-
+<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-admin-menu"></p>
 <h1>상품등록 페이지</h1>
 
 <form action="/admin/item/register.do" method="post">
-    <select name="categoryId" required>
+    <select  name="categoryId" required>
         <option value="">카테고리선택</option>
-        <option value="bone">뼈간식</option>
-        <option value="handmade">수제간식</option>
-        <option value="dental">덴탈껌</option>
-        <option value="nutrition">영양제</option>
+        <option th:each="x : ${categoryList}" th:value="${x.categoryId}" th:text="${x.categoryName}">뼈간식</option>
     </select>
     <br>
     <input type="text" name="itemName" placeholder="상품명">

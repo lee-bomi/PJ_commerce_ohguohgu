@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -30,12 +31,19 @@ public class AdminController {
     }
 
     @GetMapping("/item/register.do")
-    public String itemRegister() {
+    public String itemRegister(Model model, HttpServletRequest request) {
+
+        List<Category> categoryList = categoryService.getCategoryList();
+
+        model.addAttribute("categoryList", categoryList);
+
         return "/admin/itemRegister";
     }
 
-    @PostMapping("/item/register")
+    @PostMapping("/item/register.do")
     public String itemRegisterSubmit(Model model, ItemDto dto) {
+        System.out.println("받아온 이름 : " + dto.getItemName());
+        System.out.println("받아온 아이디 : " +dto.getCategoryId());
 
         Item item = adminService.itemRegister(Item.from(dto));
         model.addAttribute("item", item);
@@ -48,8 +56,20 @@ public class AdminController {
     }
 
     @GetMapping("/item/itemList.do")
-    public String itemList() {
+    public String itemList(Model model) {
+
+        List<Item> itemList = adminService.getItemList();
+        model.addAttribute("itemList", itemList);
+
         return "/admin/itemList";
+    }
+
+    @PostMapping("/item/delete.do")
+    public String deleteItem(Model model, Long id) {
+
+        adminService.deleteItem(id);
+
+        return "redirect:/admin/item/itemList.do";
     }
 
     @GetMapping("/category/list.do")
@@ -60,10 +80,6 @@ public class AdminController {
         return "/admin/categoryList";
     }
 
-//    @GetMapping("/category/register.do")
-//    public String categoryRegister() {
-//        return "/admin/categoryRegister";
-//    }
 
     @PostMapping("/category/register.do")
     public String categoryRegisterSubmit(Model model, CategoryInput categoryInput) {
