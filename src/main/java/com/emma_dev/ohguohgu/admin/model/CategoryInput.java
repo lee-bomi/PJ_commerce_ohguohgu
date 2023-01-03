@@ -7,10 +7,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemDto {
+public class CategoryInput {
 
-    String itemName;
-    int price;
-    String description;
-    String category;
+    String categoryName;
+
 }

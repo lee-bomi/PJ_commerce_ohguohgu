@@ -18,12 +18,14 @@ public class Item {
     private String itemName;
     private Integer price;
     private String description;
+    private String category;
 
     public static Item from(ItemDto itemDto) {
         return Item.builder()
                 .itemName(itemDto.getItemName())
                 .price(itemDto.getPrice())
                 .description(itemDto.getDescription())
+                .category(itemDto.getCategory())
                 .build();
     }
 }
