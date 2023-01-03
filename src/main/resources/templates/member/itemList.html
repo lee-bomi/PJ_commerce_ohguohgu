@@ -5,7 +5,7 @@
     <title>itemList</title>
     <style>
         .list table {
-            width: 100%;
+            width: 50%;
             border-collapse: collapse;
             text-align: center;
         }
@@ -15,6 +15,8 @@
     </style>
 </head>
 <body>
+
+<p class="" th:replace="/fragments/menuLayout.html :: fragment-member-menu"></p>
 <p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-snack-menu"></p>
 <h1>상품리스트</h1>
 <div class="list">

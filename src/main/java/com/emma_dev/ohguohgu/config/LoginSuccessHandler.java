@@ -42,6 +42,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             redirectStrategy.sendRedirect(request, response, "/admin/main.do");
         } else {
 //            resultRedirectStrategy(request, response, authentication);
+            //관리자가 아닌경우
+            redirectStrategy.sendRedirect(request, response, "/member/item/list");
         }
 
     }
