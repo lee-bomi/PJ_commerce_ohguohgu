@@ -2,6 +2,8 @@ package com.emma_dev.ohguohgu.member.controller;
 
 import com.emma_dev.ohguohgu.admin.entity.Item;
 import com.emma_dev.ohguohgu.admin.service.AdminService;
+import com.emma_dev.ohguohgu.member.dto.MemberDto;
+import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
 import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +33,8 @@ public class MemberController {
 
     @PostMapping("/member/register")
     public String registSubmit(Model model, HttpServletRequest request, MemberInput input){
-        boolean result = memberService.register(input);
-        if (!result) {
+        MemberDto result = memberService.register(input);
+        if (result == null) {
             return "/member/register_fail";
         }
         model.addAttribute("result", result);
@@ -44,7 +46,7 @@ public class MemberController {
 
         String uuid = request.getParameter("uuid");
         //service에서 id정보확인
-        boolean authResult = memberService.emailAuth(uuid);
+        Member authResult = memberService.emailAuth(uuid);
         model.addAttribute("result", authResult);
 
         return "member/emailAuthResult";
@@ -55,12 +57,19 @@ public class MemberController {
         return "member/login";
     }
 
+
+
     @PostMapping("/member/login")
-    public void loginSubmit() {
+    public void loginSubmit(MemberInput input) {
         System.out.println("isAuthenticated : " + isAuthenticated());
 
-        //로그인성공하면 admin/main.do
-        //실패하면 /member/login?error=true
+        //시큐리티에서 처리
+//        boolean loginResult = memberService.login(input);
+
+//        if (!loginResult) {
+//            return "/member/login?error=true";
+//        }
+//        return "/member/itemList";
     }
 
     private boolean isAuthenticated() {

@@ -1,6 +1,7 @@
 package com.emma_dev.ohguohgu.member.service;
 
 import com.emma_dev.ohguohgu.component.MailComponent;
+import com.emma_dev.ohguohgu.member.dto.MemberDto;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
 import com.emma_dev.ohguohgu.member.repository.MemberRepository;
@@ -35,18 +36,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean register(MemberInput input) {
+    public MemberDto register(MemberInput input) {
 
-        Optional<Member> optionalMember = memberRepository.findByUsername(input.getUsername());
-        System.out.println("member : " + optionalMember);
-        if (optionalMember.isPresent()) {
-            return false;
+        Optional<Member> findMember = memberRepository.findByUsername(input.getUsername());
+        if (findMember.isPresent()) {
+            System.out.println("회원가입 불가 : 이미 존재하는 회원입니다");
+            return null;
         }
 
+//        String encPw = passwordEncoder.encode(input.getPassword());
         String encPw = BCrypt.hashpw(input.getPassword(), BCrypt.gensalt());
+        System.out.println("encPw : " +  encPw);
         String uuid = UUID.randomUUID().toString();
 
-        memberRepository.save(Member.builder()
+        Member member = memberRepository.save(Member.builder()
                 .username(input.getUsername())
                 .name(input.getName())
                 .phone(input.getPhone())
@@ -57,6 +60,11 @@ public class MemberServiceImpl implements MemberService {
                 .regDt(LocalDateTime.now())
                 .build());
 
+        System.out.println("Member : " + member.getUsername());
+        System.out.println("Member : " + member.getName());
+        System.out.println("Member : " + member.getPassword());
+
+
         String email = input.getUsername();
         String subject = "오구오구 가입 인증메일입니다";
         String text = "<p>가입축하드려요! 아래링크 클릭하셔서 가입을 완료하세요</p>"
@@ -64,28 +72,28 @@ public class MemberServiceImpl implements MemberService {
 
         mailComponent.sendMail(email, subject, text);
 
-        return true;
+        return MemberDto.of(member);
     }
 
     @Override
-    public boolean emailAuth(String uuid) {
+    public Member emailAuth(String uuid) {
 
         Optional<Member> optionalMember = memberRepository.findByEmailAuthKey(uuid);
         if (optionalMember.isEmpty()) {
-            return false;
+            return null;
         }
 
         Member member = optionalMember.get();
 
 //        //이미 계정 활성화되어있는데 새로고침했을때 계속 활성화 되지않게하기 위함
         if (member.isEmailAuthYn()) {
-            return false;
+            return null;
         }
 
         member.setEmailAuthYn(true);
         memberRepository.save(member);
 
-        return true;
+        return member;
     }
 
     @Override
@@ -124,6 +132,19 @@ public class MemberServiceImpl implements MemberService {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
+    }
+
+    @Override
+    public Member checkUser(String username) {
+        if (username == null) {
+            return null;
+        }
+        Member member = memberRepository.findByUsername(username).get();
+        if (member != null) {
+            return member;
+        } else {
+            return null;
+        }
     }
 
 }
