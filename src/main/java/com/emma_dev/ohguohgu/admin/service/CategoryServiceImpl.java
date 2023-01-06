@@ -1,8 +1,12 @@
 package com.emma_dev.ohguohgu.admin.service;
 
 import com.emma_dev.ohguohgu.admin.entity.Category;
+import com.emma_dev.ohguohgu.admin.model.CategoryInput;
 import com.emma_dev.ohguohgu.admin.repository.CategoryRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +18,15 @@ public class CategoryServiceImpl implements CategoryService{
 
     private final CategoryRepository categoryRepository;
 
-
     @Override
-    public void categoryRegister(Category category) {
-        categoryRepository.save(category);
+    public Category categoryRegister(Category _category) {
+
+        Optional<Category> category = categoryRepository.findByCategoryName(_category.getCategoryName());
+        if (category.isPresent()) {
+            throw new RuntimeException("해당 카테고리는 이미 존재합니다");
+        }
+
+        return categoryRepository.save(category.get());
     }
 
     @Override
@@ -34,5 +43,12 @@ public class CategoryServiceImpl implements CategoryService{
         Category category = byId.get();
 
         categoryRepository.deleteById(category.getCategoryId());
+    }
+
+    @Override
+    public Category getCategory(String categoryName) {
+        return categoryRepository.findByCategoryName(categoryName)
+                .orElseThrow(() -> new RuntimeException("해당 카테고리는 없어요"));
+
     }
 }

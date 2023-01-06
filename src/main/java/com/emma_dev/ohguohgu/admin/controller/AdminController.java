@@ -6,6 +6,7 @@ import com.emma_dev.ohguohgu.admin.model.CategoryInput;
 import com.emma_dev.ohguohgu.admin.model.ItemDto;
 import com.emma_dev.ohguohgu.admin.service.AdminService;
 import com.emma_dev.ohguohgu.admin.service.CategoryService;
+import com.emma_dev.ohguohgu.admin.service.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -11,10 +11,10 @@ public interface CategoryService {
     /**
      * 카테고리 등록
      */
-    void categoryRegister(Category category);
+    Category categoryRegister(Category category);
 
     /**
-     * 카테고리 가져오기
+     * 카테고리 전체 가져오기
      */
     List<Category> getCategoryList();
 
@@ -22,4 +22,9 @@ public interface CategoryService {
      * 카테고리 삭제
      */
     void deleteCategory(Long id);
+
+    /**
+     *
+     */
+    Category getCategory(String categoryName);
 }
