@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원관리</title>
+</head>
+<body>
+<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-admin-menu"></p>
+<h1>회원 목록</h1>
+
+<table>
+    <tr>
+        <th>이메일</th>
+        <th>이름</th>
+        <th>전화번호</th>
+        <th>이메일인증</th>
+        <th>등록일</th>
+        <th></th>
+    </tr>
+    <tr th:each="x : ${memberList}">
+        <th th:text="${x.username}"></th>
+        <th th:text="${x.name}"></th>
+        <th th:text="${x.phone}"></th>
+        <th th:text="${x.emailAuthYn}"></th>
+        <th th:text="${x.regDt}"></th>
+    </tr>
+</table>
+</body>
+</html>

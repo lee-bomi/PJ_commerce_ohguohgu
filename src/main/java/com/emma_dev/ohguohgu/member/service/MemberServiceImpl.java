@@ -60,11 +60,6 @@ public class MemberServiceImpl implements MemberService {
                 .regDt(LocalDateTime.now())
                 .build());
 
-        System.out.println("Member : " + member.getUsername());
-        System.out.println("Member : " + member.getName());
-        System.out.println("Member : " + member.getPassword());
-
-
         String email = input.getUsername();
         String subject = "오구오구 가입 인증메일입니다";
         String text = "<p>가입축하드려요! 아래링크 클릭하셔서 가입을 완료하세요</p>"
@@ -145,6 +140,11 @@ public class MemberServiceImpl implements MemberService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Member> getMemberList() {
+        return memberRepository.findByAdminYnIsFalse();
     }
 
 }

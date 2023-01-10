@@ -7,6 +7,8 @@ import com.emma_dev.ohguohgu.admin.model.ItemDto;
 import com.emma_dev.ohguohgu.admin.service.AdminService;
 import com.emma_dev.ohguohgu.admin.service.CategoryService;
 import com.emma_dev.ohguohgu.admin.service.CategoryServiceImpl;
+import com.emma_dev.ohguohgu.member.entity.Member;
+import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final CategoryService categoryService;
+    private final MemberService memberService;
 
     @GetMapping("/main.do")
     public String main() {
@@ -99,5 +103,13 @@ public class AdminController {
 
         categoryService.deleteCategory(id);
         return "redirect:/admin/category/list.do";
+    }
+
+    @GetMapping("/member/list.do")
+    public String memberList(Model model) {
+        List<Member> memberList = memberService.getMemberList();
+        model.addAttribute("memberList", memberList);
+
+        return "/admin/memberList";
     }
 }

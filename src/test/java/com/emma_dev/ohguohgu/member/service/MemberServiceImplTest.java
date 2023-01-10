@@ -9,6 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -96,5 +99,45 @@ class MemberServiceImplTest {
         assertEquals("12", member.getPassword());
         verify(memberRepository, times(1)).findByUsername(any());
         verify(memberRepository, times(0)).save(any());
+    }
+
+    @Test
+    @DisplayName("관리자를 제외한 회원목록만 가져온다")
+    void findMemberList() {
+       //given
+        List<Member> members = Arrays.asList(
+                Member.builder()
+                        .username("bomvll@naver.com")
+                        .name("보미1")
+                        .adminYn(false)
+                        .build(),
+                Member.builder()
+                        .username("bomvll2@naver.com")
+                        .name("보미2")
+                        .adminYn(false)
+                        .build(),
+                Member.builder()
+                        .username("bomvll3@naver.com")
+                        .name("보미3")
+                        .adminYn(false)
+                        .build()
+        );
+
+        given(memberRepository.findByAdminYnIsFalse())
+                .willReturn(members);
+
+        //when
+        List<Member> memberList = memberService.getMemberList();
+
+        //then
+        assertEquals(3, memberList.size());
+        assertEquals("bomvll@naver.com", memberList.get(0).getUsername());
+        assertEquals("bomvll2@naver.com", memberList.get(1).getUsername());
+        assertEquals("bomvll3@naver.com", memberList.get(2).getUsername());
+        assertEquals("보미1", memberList.get(0).getName());
+        assertEquals("보미2", memberList.get(1).getName());
+        assertEquals("보미3", memberList.get(2).getName());
+        verify(memberRepository, times(1)).findByAdminYnIsFalse();
+
     }
 }

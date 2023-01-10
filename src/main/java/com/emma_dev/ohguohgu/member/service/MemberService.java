@@ -6,6 +6,9 @@ import com.emma_dev.ohguohgu.member.model.MemberInput;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface MemberService extends UserDetailsService {
 
     /**
@@ -33,4 +36,9 @@ public interface MemberService extends UserDetailsService {
      * 존재하는 회원인지 확인
      */
     Member checkUser(String username);
+
+    /**
+     * 전체 회원 리스트(관리자 제외)
+     */
+    List<Member> getMemberList();
 }
