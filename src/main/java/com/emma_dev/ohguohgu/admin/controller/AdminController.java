@@ -31,7 +31,6 @@ public class AdminController {
 
     @GetMapping("/main.do")
     public String main() {
-
         return "/admin/main";
     }
 
@@ -89,9 +88,7 @@ public class AdminController {
     @PostMapping("/category/register.do")
     public String categoryRegisterSubmit(Model model, CategoryInput categoryInput) {
 
-        //categoryInput -> Category로 변환
         categoryService.categoryRegister(Category.from(categoryInput));
-
         List<Category> categoryList = categoryService.getCategoryList();
         model.addAttribute("categories", categoryList);
 

@@ -1,5 +1,6 @@
 package com.emma_dev.ohguohgu.member.service;
 
+import com.emma_dev.ohguohgu.admin.entity.Item;
 import com.emma_dev.ohguohgu.component.MailComponent;
 import com.emma_dev.ohguohgu.member.dto.MemberDto;
 import com.emma_dev.ohguohgu.member.entity.Member;
@@ -145,6 +146,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> getMemberList() {
         return memberRepository.findByAdminYnIsFalse();
+    }
+
+
+    @Override
+    public Item addItem(Item item) {
+        return null;
     }
 
 }

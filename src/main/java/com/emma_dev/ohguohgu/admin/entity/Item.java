@@ -1,6 +1,7 @@
 package com.emma_dev.ohguohgu.admin.entity;
 
 import com.emma_dev.ohguohgu.admin.model.ItemDto;
+import com.emma_dev.ohguohgu.cart.entity.Cart;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class Item {
     @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
     private Category categoryId;
+
+    @ManyToOne(targetEntity = Item.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="cart_id")
+    private Cart cartId;
 
     public static Item from(ItemDto itemDto) {
         return Item.builder()

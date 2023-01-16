@@ -93,4 +93,12 @@ public class MemberController {
 
         return "/member/itemList";
     }
+
+    @GetMapping("/member/itemAdd")
+    public String itemAdd(Model model, Long id) {
+        Item item = adminService.getItem(id);
+
+
+        return "/member/itemList";
+    }
 }

@@ -23,4 +23,9 @@ public interface AdminService {
      * 상품삭제
      */
     void deleteItem(Long id);
+
+    /**
+     * 상품1개의 정보 가져오기
+     */
+    Item getItem(Long id);
 }

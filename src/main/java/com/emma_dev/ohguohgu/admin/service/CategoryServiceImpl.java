@@ -20,13 +20,11 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Category categoryRegister(Category _category) {
-
-        Optional<Category> category = categoryRepository.findByCategoryName(_category.getCategoryName());
-        if (category.isPresent()) {
+        if (categoryRepository.countAllByCategoryName(_category.getCategoryName()) > 0) {
             throw new RuntimeException("해당 카테고리는 이미 존재합니다");
         }
 
-        return categoryRepository.save(category.get());
+        return categoryRepository.save(_category);
     }
 
     @Override

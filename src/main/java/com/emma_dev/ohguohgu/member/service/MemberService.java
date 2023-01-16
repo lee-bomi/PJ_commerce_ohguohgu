@@ -1,5 +1,6 @@
 package com.emma_dev.ohguohgu.member.service;
 
+import com.emma_dev.ohguohgu.admin.entity.Item;
 import com.emma_dev.ohguohgu.member.dto.MemberDto;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
@@ -41,4 +42,9 @@ public interface MemberService extends UserDetailsService {
      * 전체 회원 리스트(관리자 제외)
      */
     List<Member> getMemberList();
+
+    /**
+     * 장바구니에 상품 추가
+     */
+    Item addItem(Item item);
 }

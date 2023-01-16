@@ -6,11 +6,11 @@
 </head>
 <body>
 <h1>메일 인증 결과</h1>
-<div th:if="${result eq true}">
+<div th:if="${result ne null}">
   <p >회원가입 완료 - 메일 인증 완료되었습니다</p>
   <a href="/member/main"></a>
 </div>
 
-<p th:if="${result eq false}">메일인증에 실패하였습니다</p>
+<p th:if="${result eq null}">메일인증에 실패하였습니다</p>
 </body>
 </html>

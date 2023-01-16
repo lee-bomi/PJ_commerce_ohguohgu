@@ -42,5 +42,11 @@ public class AdminServiceImpl implements AdminService{
         adminRepository.deleteById(item.getId());
     }
 
+    @Override
+    public Item getItem(Long id) {
+        return adminRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 상품이 없습니다"));
+    }
+
 
 }
