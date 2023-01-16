@@ -56,7 +56,7 @@ public class AdminController {
         List<Item> itemList = adminService.getItemList();
         model.addAttribute("itemList", itemList);
 
-        return "/member/itemList";
+        return "/admin/itemList";
     }
 
     @GetMapping("/item/itemList.do")
