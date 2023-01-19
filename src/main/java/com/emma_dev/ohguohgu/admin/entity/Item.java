@@ -22,21 +22,20 @@ public class Item {
     private String itemName;
     private Integer price;
     private String description;
+    private Integer count;
 
     @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
-    private Category categoryId;
+    private Category category;
 
-    @ManyToOne(targetEntity = Item.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="cart_id")
-    private Cart cartId;
+
 
     public static Item from(ItemDto itemDto) {
         return Item.builder()
                 .itemName(itemDto.getItemName())
                 .price(itemDto.getPrice())
                 .description(itemDto.getDescription())
-                .categoryId(Category.builder()
+                .category(Category.builder()
                         .categoryId(itemDto.getCategoryId())
                         .build())
                 .build();

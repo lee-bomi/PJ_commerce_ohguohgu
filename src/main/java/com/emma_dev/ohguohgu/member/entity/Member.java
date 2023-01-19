@@ -31,9 +31,4 @@ public class Member {
 
     private LocalDateTime regDt;
     private LocalDateTime udtDt;
-
-    @OneToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
 }

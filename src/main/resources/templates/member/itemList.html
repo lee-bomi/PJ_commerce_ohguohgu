@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-admin-menu"></p>
+<p class="rightMenu" th:replace="/fragments/menuLayout.html :: fragment-member-menu"></p>
 <h1>Ohgu-ohgu</h1>
 <h3>강아지 간식 쇼핑몰</h3>
 <div class="list">
@@ -33,7 +33,7 @@
             <td th:text="${x.price}"></td>
             <td th:text="${x.description}"></td>
             <td>
-                <form action="/member/itemAdd" method="post">
+                <form action="/member/item/add" method="post">
                     <input type="hidden" name="id" th:value="${x.id}">
                     <button>담기</button>
                 </form>

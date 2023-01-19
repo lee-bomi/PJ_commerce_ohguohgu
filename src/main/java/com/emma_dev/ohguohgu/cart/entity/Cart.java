@@ -1,9 +1,12 @@
 package com.emma_dev.ohguohgu.cart.entity;
 
+import com.emma_dev.ohguohgu.admin.entity.Item;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -18,7 +21,11 @@ public class Cart {
     @Column(name = "cart_id")
     private Long cartId;
 
-    @OneToOne(mappedBy = "cart")
-    private Member member;
+    private Long itemId;
+    private String itemName;
+    private Integer price;
+    private Integer count;
+
+    private String userName;
 
 }

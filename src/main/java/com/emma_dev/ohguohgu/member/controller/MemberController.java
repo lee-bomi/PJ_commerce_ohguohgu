@@ -2,6 +2,8 @@ package com.emma_dev.ohguohgu.member.controller;
 
 import com.emma_dev.ohguohgu.admin.entity.Item;
 import com.emma_dev.ohguohgu.admin.service.AdminService;
+import com.emma_dev.ohguohgu.cart.Service.CartService;
+import com.emma_dev.ohguohgu.cart.entity.Cart;
 import com.emma_dev.ohguohgu.member.dto.MemberDto;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
@@ -9,14 +11,19 @@ import com.emma_dev.ohguohgu.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -24,6 +31,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AdminService adminService;
+    private final CartService cartService;
 
     @GetMapping("/member/register")
     public String register(){
@@ -64,12 +72,6 @@ public class MemberController {
         System.out.println("isAuthenticated : " + isAuthenticated());
 
         //시큐리티에서 처리
-//        boolean loginResult = memberService.login(input);
-
-//        if (!loginResult) {
-//            return "/member/login?error=true";
-//        }
-//        return "/member/itemList";
     }
 
     private boolean isAuthenticated() {
@@ -94,11 +96,65 @@ public class MemberController {
         return "/member/itemList";
     }
 
-    @GetMapping("/member/itemAdd")
-    public String itemAdd(Model model, Long id) {
-        Item item = adminService.getItem(id);
+    @PostMapping("/member/item/add")
+    public String addItem(@RequestParam Long id,
+                          Model model) {
+        // 로그인한 사람 정보가져와서
+        UserDetails user = cartService.getUserInfo();
+        String loginUser = user.getUsername();
+        //해당 아이템을 가져와서
+        Item item = cartService.getItem(id);
 
+        //그 사람의 개인카트레포에 담는다
+        Cart cart = Cart.builder()
+                .itemId(item.getId())
+                .itemName(item.getItemName())
+                .price(item.getPrice())
+                .userName(loginUser)
+                .count(1)
+                .build();
 
-        return "/member/itemList";
+        cartService.saveCart(cart);
+
+        List<Cart> cartList = cartService.getAllCart(loginUser);
+        model.addAttribute("cartList", cartList);
+        model.addAttribute("username", cartList.get(0).getUserName());
+        return "/member/cart";
+    }
+
+    @PostMapping("/member/modify/count")
+    public String modifyCount(@RequestParam Long cartId,
+                              @RequestParam int count,
+                              Model model) {
+
+        Cart cart = cartService.getCart(cartId);
+        cart.setCount(count);
+        cartService.saveCart(cart);
+
+        UserDetails user = cartService.getUserInfo();
+        String loginUser = user.getUsername();
+
+        List<Cart> cartList = cartService.getAllCart(loginUser);
+        model.addAttribute("cartList", cartList);
+
+        return "/member/cart";
+    }
+
+    @PostMapping("/member/delete/cart")
+    public String deleteCartItem(@RequestParam Long cartId,
+                                 Model model) {
+
+        System.out.println("======== cartId : " +  cartId);
+
+        Cart cart = cartService.getCart(cartId);
+        cartService.deleteItem(cart);
+
+        UserDetails user = cartService.getUserInfo();
+        String loginUser = user.getUsername();
+
+        List<Cart> cartList = cartService.getAllCart(loginUser);
+        model.addAttribute("cartList", cartList);
+
+        return "/member/cart";
     }
 }

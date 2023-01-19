@@ -149,9 +149,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    @Override
-    public Item addItem(Item item) {
-        return null;
-    }
+//    @Override
+//    public Item addItem(Item item) {
+//        return null;
+//    }
 
 }

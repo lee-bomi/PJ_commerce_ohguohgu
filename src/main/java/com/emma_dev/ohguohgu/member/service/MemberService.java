@@ -43,8 +43,4 @@ public interface MemberService extends UserDetailsService {
      */
     List<Member> getMemberList();
 
-    /**
-     * 장바구니에 상품 추가
-     */
-    Item addItem(Item item);
 }
