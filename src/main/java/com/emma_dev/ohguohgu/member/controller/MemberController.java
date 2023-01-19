@@ -117,8 +117,22 @@ public class MemberController {
         cartService.saveCart(cart);
 
         List<Cart> cartList = cartService.getAllCart(loginUser);
+        System.out.println("cart : =============== " + cartList.get(0).getUserName());
         model.addAttribute("cartList", cartList);
         model.addAttribute("username", cartList.get(0).getUserName());
+        return "/member/cart";
+    }
+
+    //장바구니 메뉴버튼을 이용한 진입
+    @GetMapping("member/cart")
+    public String cart(Model model) {
+
+        UserDetails user = cartService.getUserInfo();
+        String loginUser = user.getUsername();
+
+        List<Cart> cartList = cartService.getAllCart(loginUser);
+        model.addAttribute("cartList", cartList);
+
         return "/member/cart";
     }
 
