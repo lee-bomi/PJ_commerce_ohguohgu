@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .permitAll();
 
         http.authorizeRequests()
-                .antMatchers("/admin/**")
+                .antMatchers("/admin/**", "/swagger-ui/**")
                 .hasAuthority("ROLE_ADMIN")
                 .antMatchers("/member/**")
                 .hasAuthority("ROLE_USER");

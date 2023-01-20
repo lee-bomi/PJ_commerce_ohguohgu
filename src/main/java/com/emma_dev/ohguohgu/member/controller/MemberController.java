@@ -8,6 +8,7 @@ import com.emma_dev.ohguohgu.member.dto.MemberDto;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.model.MemberInput;
 import com.emma_dev.ohguohgu.member.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,6 +40,7 @@ public class MemberController {
         return "/member/register";
     }
 
+    @ApiOperation("회원가입 정보를 받는 API")
     @PostMapping("/member/register")
     public String registSubmit(Model model, HttpServletRequest request, MemberInput input){
         MemberDto result = memberService.register(input);
@@ -49,6 +51,7 @@ public class MemberController {
         return "/member/register_complete";
     }
 
+    @ApiOperation("회원가입 후 이메일 인증")
     @GetMapping("/member/email-auth")
     public String emailAuth(Model model, HttpServletRequest request) {
 
@@ -60,13 +63,14 @@ public class MemberController {
         return "member/emailAuthResult";
     }
 
+    @ApiOperation("회원 로그인페이지로 이동")
     @GetMapping("/member/login")
     public String login() {
         return "member/login";
     }
 
 
-
+    @ApiOperation("회원 로그인")
     @PostMapping("/member/login")
     public void loginSubmit(MemberInput input) {
         System.out.println("isAuthenticated : " + isAuthenticated());
@@ -83,11 +87,13 @@ public class MemberController {
         return authentication.isAuthenticated();
     }
 
+    @ApiOperation("회원 로그인 성공했을때 이동 API")
     @GetMapping("/member/loginSuccess")
     public String loginSuccess() {
         return "index";
     }
 
+    @ApiOperation("등록된 상품리스트 가져오기")
     @GetMapping("/member/item/list")
     public String itemList(Model model) {
         List<Item> itemList = adminService.getItemList();
@@ -96,6 +102,7 @@ public class MemberController {
         return "/member/itemList";
     }
 
+    @ApiOperation("카트에 상품 담기")
     @PostMapping("/member/item/add")
     public String addItem(@RequestParam Long id,
                           Model model) {
@@ -123,6 +130,7 @@ public class MemberController {
         return "/member/cart";
     }
 
+    @ApiOperation("장바구니 버튼클릭 시 해당 회원의 장바구니페이지로 이동")
     //장바구니 메뉴버튼을 이용한 진입
     @GetMapping("member/cart")
     public String cart(Model model) {
@@ -136,6 +144,7 @@ public class MemberController {
         return "/member/cart";
     }
 
+    @ApiOperation("장바구니에서 상품개수 수정")
     @PostMapping("/member/modify/count")
     public String modifyCount(@RequestParam Long cartId,
                               @RequestParam int count,
@@ -154,11 +163,10 @@ public class MemberController {
         return "/member/cart";
     }
 
+    @ApiOperation("카트에서 상품 삭제")
     @PostMapping("/member/delete/cart")
     public String deleteCartItem(@RequestParam Long cartId,
                                  Model model) {
-
-        System.out.println("======== cartId : " +  cartId);
 
         Cart cart = cartService.getCart(cartId);
         cartService.deleteItem(cart);

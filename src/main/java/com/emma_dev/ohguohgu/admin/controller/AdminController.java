@@ -9,6 +9,7 @@ import com.emma_dev.ohguohgu.admin.service.CategoryService;
 import com.emma_dev.ohguohgu.admin.service.CategoryServiceImpl;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.service.MemberService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ public class AdminController {
         return "/admin/main";
     }
 
+    @ApiOperation("관리자 - 카테고리 등록페이지로 이동")
     @GetMapping("/item/register.do")
     public String itemRegister(Model model, HttpServletRequest request) {
 
@@ -44,10 +46,9 @@ public class AdminController {
         return "/admin/itemRegister";
     }
 
+    @ApiOperation("관리자 - 상품 등록")
     @PostMapping("/item/register.do")
     public String itemRegisterSubmit(Model model, ItemDto dto) {
-        System.out.println("받아온 이름 : " + dto.getItemName());
-        System.out.println("받아온 아이디 : " +dto.getCategoryId());
 
         Item item = adminService.itemRegister(Item.from(dto));
         model.addAttribute("item", item);
@@ -59,6 +60,7 @@ public class AdminController {
         return "/admin/itemList";
     }
 
+    @ApiOperation("관리자 - 등록된 모든 상품의 리스트 확인")
     @GetMapping("/item/itemList.do")
     public String itemList(Model model) {
 
@@ -68,6 +70,7 @@ public class AdminController {
         return "/admin/itemList";
     }
 
+    @ApiOperation("관리자 - 상품리스트의 상품 삭제")
     @PostMapping("/item/delete.do")
     public String deleteItem(Model model, Long id) {
 
@@ -76,6 +79,7 @@ public class AdminController {
         return "redirect:/admin/item/itemList.do";
     }
 
+    @ApiOperation("관리자 - 카테고리를 등록하고 확인하는 페이지로 이동")
     @GetMapping("/category/list.do")
     public String categoryList(Model model) {
         List<Category> categoryList = categoryService.getCategoryList();
@@ -84,7 +88,7 @@ public class AdminController {
         return "/admin/categoryList";
     }
 
-
+    @ApiOperation("관리자 - 카테고리 등록")
     @PostMapping("/category/register.do")
     public String categoryRegisterSubmit(Model model, CategoryInput categoryInput) {
 
@@ -95,6 +99,7 @@ public class AdminController {
         return "/admin/categoryList";
     }
 
+    @ApiOperation("관리자 - 카테고리 삭제")
     @PostMapping("/category/delete.do")
     public String deleteCategory(Model model, Long id) {
 
@@ -102,6 +107,7 @@ public class AdminController {
         return "redirect:/admin/category/list.do";
     }
 
+    @ApiOperation("관리자 - 회원 리스트 가져오기")
     @GetMapping("/member/list.do")
     public String memberList(Model model) {
         List<Member> memberList = memberService.getMemberList();
