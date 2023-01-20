@@ -10,6 +10,7 @@ import com.emma_dev.ohguohgu.admin.service.CategoryServiceImpl;
 import com.emma_dev.ohguohgu.member.entity.Member;
 import com.emma_dev.ohguohgu.member.service.MemberService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

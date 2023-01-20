@@ -124,7 +124,7 @@ public class MemberController {
         cartService.saveCart(cart);
 
         List<Cart> cartList = cartService.getAllCart(loginUser);
-        System.out.println("cart : =============== " + cartList.get(0).getUserName());
+
         model.addAttribute("cartList", cartList);
         model.addAttribute("username", cartList.get(0).getUserName());
         return "/member/cart";
